@@ -12,6 +12,8 @@
 #include <sstream>
 #include <iostream>
 
+using namespace std;
+
 DNA::DNA() : head(nullptr), tail(nullptr) {}
 
 DNA::~DNA() {
@@ -31,46 +33,177 @@ void DNA::loadFromFile(const string& filename) {
     }
 
     string line;
-    int chromosomeCount = 0; // Debugging statement
+    int chromosomeCount = 0;
     while (getline(file, line)) {
-        cout << "Reading line: " << line << endl;
         Chromosome chromosome;
         istringstream iss(line);
         char geneValue;
         while (iss >> geneValue) {
-            cout << "Adding gene: " << geneValue << endl;
             chromosome.addGene(geneValue);
         }
 
         Node* newNode = new Node(chromosome);
-        if (head == NULL) {
+        if (!head) {
             head = tail = newNode;
-            cout << "Added first chromosome to DNA.\n";
         } else {
             tail->next = newNode;
             newNode->prev = tail;
             tail = newNode;
-            cout << "Added new chromosome to DNA.\n";
         }
-        chromosomeCount++; // Debugging statement
-        cout << "Number of chromosomes: " << chromosomeCount << endl; // Debugging statement
-        cout << "Current DNA state:\n";
-        printAll(); // Debugging statement to print current state of DNA
+        chromosomeCount++;
     }
     file.close();
+    cout << "Number of chromosomes: " << chromosomeCount << endl;
     cout << "File reading completed.\n";
+}
+
+void DNA::saveToFile(const string& filename) const {
+    ofstream file(filename);
+    if (!file) {
+        cerr << "Failed to open file for writing\n";
+        return;
+    }
+
+    Node* current = head;
+    while (current) {
+        current->chromosome.display(file);
+        current = current->next;
+    }
+    file.close();
+}
+
+void DNA::crossover(int index1, int index2) {
+    Node* chrom1 = head;
+    Node* chrom2 = head;
+
+    for (int i = 0; i < index1 && chrom1; ++i) {
+        chrom1 = chrom1->next;
+    }
+    for (int i = 0; i < index2 && chrom2; ++i) {
+        chrom2 = chrom2->next;
+    }
+
+    if (!chrom1 || !chrom2) {
+        cerr << "Invalid chromosome indices\n";
+        return;
+    }
+
+    int len1 = chrom1->chromosome.getLength();
+    int len2 = chrom2->chromosome.getLength();
+    int mid1 = len1 / 2;
+    int mid2 = len2 / 2;
+
+    Chromosome newChrom1;
+    Chromosome newChrom2;
+    
+    auto current1 = chrom1->chromosome.getHead();
+    for (int i = 0; i < mid1 && current1; ++i) {
+        newChrom1.addGene(current1->gene.getValue());
+        current1 = current1->next;
+    }
+    
+    if (len1 % 2 != 0 && current1) {
+        current1 = current1->next;
+    }
+    
+    auto current2 = chrom2->chromosome.getHead();
+    for (int i = 0; i < mid2 && current2; ++i) {
+        current2 = current2->next;
+    }
+    if (len2 % 2 != 0 && current2) {
+        current2 = current2->next;
+    }
+    while (current2) {
+        newChrom1.addGene(current2->gene.getValue());
+        current2 = current2->next;
+    }
+
+    current2 = chrom2->chromosome.getHead();
+    for (int i = 0; i < mid2 && current2; ++i) {
+        newChrom2.addGene(current2->gene.getValue());
+        current2 = current2->next;
+    }
+    
+    if (len2 % 2 != 0 && current2) {
+        current2 = current2->next;
+    }
+    
+    current1 = chrom1->chromosome.getHead();
+    for (int i = 0; i < mid1 && current1; ++i) {
+        current1 = current1->next;
+    }
+    if (len1 % 2 != 0 && current1) {
+        current1 = current1->next;
+    }
+    while (current1) {
+        newChrom2.addGene(current1->gene.getValue());
+        current1 = current1->next;
+    }
+
+    Node* newNode1 = new Node(newChrom1);
+    Node* newNode2 = new Node(newChrom2);
+
+    if (!head) {
+        head = tail = newNode1;
+    } else {
+        tail->next = newNode1;
+        newNode1->prev = tail;
+        tail = newNode1;
+    }
+
+    tail->next = newNode2;
+    newNode2->prev = tail;
+    tail = newNode2;
+
+    saveToFile("Dna.txt");
+}
+
+void DNA::mutate(int chromIndex, int geneIndex) {
+    Node* current = head;
+    for (int i = 0; i < chromIndex && current; ++i) {
+        current = current->next;
+    }
+    if (current) {
+        current->chromosome.mutateGene(geneIndex);
+        saveToFile("Dna.txt");
+    } else {
+        cerr << "Chromosome index out of range\n";
+    }
 }
 
 void DNA::printAll() const {
     Node* current = head;
-    int count = 0;
     while (current) {
-        cout << "Chromosome " << count++ << ":\n";
-        current->chromosome.display();
+        current->chromosome.findAndPrintSmallest();
         current = current->next;
-        if (current == nullptr) {
-            cout << "Reached end of DNA list.\n";
+    }
+    cout << endl;
+}
+
+void DNA::automatedOperations(const string& filename) {
+    ifstream file(filename);
+    if (!file) {
+        cerr << "Failed to open operations file\n";
+        return;
+    }
+
+    string line;
+    while (getline(file, line)) {
+        istringstream iss(line);
+        char operation;
+        iss >> operation;
+
+        if (operation == 'C') {
+            int index1, index2;
+            iss >> index1 >> index2;
+            crossover(index1, index2);
+        } 
+        else if (operation == 'M') {
+            int chromIndex, geneIndex;
+            iss >> chromIndex >> geneIndex;
+            mutate(chromIndex, geneIndex);
         }
     }
-    cout << "End of DNA state.\n";
+    file.close();
+    cout << "Automated operations completed.\n";
 }

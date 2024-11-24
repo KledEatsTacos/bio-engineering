@@ -11,6 +11,7 @@
 #define CHROMOSOME_H
 
 #include "gene.h"
+#include <iostream>
 
 using namespace std;
 
@@ -28,10 +29,18 @@ private:
 
 public:
     Chromosome();
+    Chromosome(const Chromosome& other);
     ~Chromosome();
 
     void addGene(char val);
-    void display() const;
+    void mutateGene(int index);
+    void display(ostream& out = cout) const;
+    int getLength() const { return length; }
+    Node* getHead() const { return head; }
+    Node* getTail() const { return tail; }
+    void findAndPrintSmallest() const;
+    
+    friend class DNA;
 };
 
 #endif

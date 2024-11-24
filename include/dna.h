@@ -29,9 +29,13 @@ private:
 public:
     DNA();
     ~DNA();
-
+    
     void loadFromFile(const string& filename);
+    void saveToFile(const string& filename) const;
+    void crossover(int index1, int index2);
+    void mutate(int chromIndex, int geneIndex);
     void printAll() const;
+    void automatedOperations(const string& filename);
 };
 
 #endif

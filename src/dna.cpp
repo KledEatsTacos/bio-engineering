@@ -57,21 +57,6 @@ void DNA::loadFromFile(const string& filename) {
     cout << "File reading completed.\n";
 }
 
-void DNA::saveToFile(const string& filename) const {
-    ofstream file(filename);
-    if (!file) {
-        cerr << "Failed to open file for writing\n";
-        return;
-    }
-
-    Node* current = head;
-    while (current) {
-        current->chromosome.display(file);
-        current = current->next;
-    }
-    file.close();
-}
-
 void DNA::crossover(int index1, int index2) {
     Node* chrom1 = head;
     Node* chrom2 = head;
@@ -154,8 +139,6 @@ void DNA::crossover(int index1, int index2) {
     tail->next = newNode2;
     newNode2->prev = tail;
     tail = newNode2;
-
-    saveToFile("Dna.txt");
 }
 
 void DNA::mutate(int chromIndex, int geneIndex) {
@@ -165,7 +148,6 @@ void DNA::mutate(int chromIndex, int geneIndex) {
     }
     if (current) {
         current->chromosome.mutateGene(geneIndex);
-        saveToFile("Dna.txt");
     } else {
         cerr << "Chromosome index out of range\n";
     }

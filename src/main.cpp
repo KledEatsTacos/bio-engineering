@@ -9,6 +9,7 @@
 
 #include "dna.h"
 #include <iostream>
+#include <limits>
 
 using namespace std;
 
@@ -22,16 +23,30 @@ void displayMenu() {
     cout << "Enter your choice: ";
 }
 
+int getValidChoice() {
+    int choice;
+    while (true) {
+        displayMenu();
+        cin >> choice;
+        if (cin.fail() || choice < 1 || choice > 5) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid choice. Please enter a number between 1 and 5.\n";
+        } else {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+            return choice;
+        }
+    }
+}
+
 int main() {
     cout << "Loading DNA data from file...\n";
     DNA dna;
     dna.loadFromFile("Dna.txt");
     cout << "DNA data loaded successfully.\n";
 
-    int choice;
     while (true) {
-        displayMenu();
-        cin >> choice;
+        int choice = getValidChoice();
 
         switch (choice) {
             case 1: {

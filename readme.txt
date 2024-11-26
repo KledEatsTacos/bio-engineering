@@ -1,0 +1,2 @@
+IMPORTANT NOTE: if the program is started via the terminal, the files will be read from the main directory.
+If the program is started by starting program.exe via Windows Explorer, the files will have to be in the bin folder.

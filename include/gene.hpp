@@ -1,5 +1,5 @@
 /**
- * @file        gene.h
+ * @file        gene.hpp
  * @description Declares the Gene class.
  * @course      2. A.
  * @assignment  Assignment 1.
@@ -7,8 +7,8 @@
  * @author      Mustafa Masri.
  */
 
-#ifndef GENE_H
-#define GENE_H
+#ifndef GENE_HPP
+#define GENE_HPP
 
 #include <iostream>
 using namespace std;

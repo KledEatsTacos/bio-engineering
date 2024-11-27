@@ -7,7 +7,7 @@
  * @author      Mustafa Masri.
  */
 
-#include "dna.h"
+#include "dna.hpp"
 #include <iostream>
 #include <limits>
 

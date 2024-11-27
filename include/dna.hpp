@@ -1,5 +1,5 @@
 /**
- * @file        dna.h
+ * @file        dna.hpp
  * @description Declares the DNA class.
  * @course      2. A.
  * @assignment  Assignment 1.
@@ -7,10 +7,10 @@
  * @author      Mustafa Masri.
  */
 
-#ifndef DNA_H
-#define DNA_H
+#ifndef DNA_HPP
+#define DNA_HPP
 
-#include "chromosome.h"
+#include "chromosome.hpp"
 #include <string>
 
 using namespace std;

@@ -1,5 +1,5 @@
 /**
- * @file        chromosome.h
+ * @file        chromosome.hpp
  * @description Declares the Chromosome class.
  * @course      2. A.
  * @assignment  Assignment 1.
@@ -7,10 +7,10 @@
  * @author      Mustafa Masri.
  */
 
-#ifndef CHROMOSOME_H
-#define CHROMOSOME_H
+#ifndef CHROMOSOME_HPP
+#define CHROMOSOME_HPP
 
-#include "gene.h"
+#include "gene.hpp"
 #include <iostream>
 
 using namespace std;

@@ -7,7 +7,7 @@
  * @author      Mustafa Masri.
  */
 
-#include "gene.h"
+#include "gene.hpp"
 using namespace std;
 
 Gene::Gene(char val) : value(val) {}

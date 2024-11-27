@@ -7,7 +7,7 @@
  * @author      Mustafa Masri.
  */
 
-#include "chromosome.h"
+#include "chromosome.hpp"
 #include <iostream>
 
 Chromosome::Chromosome() : head(nullptr), tail(nullptr), length(0) {}
